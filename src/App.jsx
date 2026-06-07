@@ -231,7 +231,7 @@ function Hero() {
           <img
             src="/linkedin-cover.jpeg"
             alt="Naveen Sharma · FreelanceHub — SaaS Implementation, Product Support & Technical Operations"
-            className="h-36 w-full object-cover object-center sm:h-44"
+            className="w-full h-auto"
           />
         </div>
 
