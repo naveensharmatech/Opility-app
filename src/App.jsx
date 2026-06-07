@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Menu, X, Mail, Github, MapPin, Globe, ArrowRight, CheckCircle2,
   Workflow, Headset, ShieldCheck, FileText, Layers, Database,
-  ClipboardCheck, Code2, ExternalLink, Phone, Linkedin,
+  ClipboardCheck, Code2, ExternalLink, Phone, Linkedin, Star,
 } from "lucide-react";
 
 /* ─── DATA ───────────────────────────────────────────────────── */
@@ -15,6 +15,14 @@ const NAV_LINKS = [
   { label: "Services",     href: "#services" },
   { label: "Projects",     href: "#projects" },
   { label: "Contact",      href: "#contact" },
+];
+
+const HEADLINES = [
+  "SaaS Implementation Specialist",
+  "API Validation Expert",
+  "QA & UAT Engineer",
+  "Product Support Specialist",
+  "B2B Technical Contractor",
 ];
 
 const EXPERTISE = [
@@ -67,32 +75,32 @@ const CASE_STUDIES = [
     tag: "Bolt Healthcare · Case Study",
     challenge: "A healthcare agency using the Bolt Intake App needed complex intake workflows configured and validated before go-live. Misconfigured workflows were causing data gaps in client onboarding pipelines and creating downstream compliance risk.",
     role: "SaaS Implementation & Product Specialist — led end-to-end workflow configuration, UAT planning, and pre-production validation.",
-    solution: "Configured system workflows and intake form logic against business and compliance requirements. Ran structured UAT cycles, documented failures, and iterated with engineering until the workflow met production standards. Built supporting SOPs to help non-technical intake coordinators operate the system confidently.",
-    outcome: "Delivered a validated intake configuration that passed UAT, met healthcare compliance expectations, and was successfully promoted to production with minimal post-launch support tickets.",
+    solution: "Configured system workflows and intake form logic against business and compliance requirements. Ran structured UAT cycles, documented failures, and iterated with engineering until the workflow met production standards.",
+    outcome: "Delivered a validated intake configuration that passed UAT, met healthcare compliance expectations, and was successfully promoted to production.",
   },
   {
     title: "Dynamic PDF Mapping & Document Automation",
     tag: "Bolt Healthcare · Case Study",
-    challenge: "Dynamic compliance PDFs — including state billing forms and e-signature packets — were failing to compile or dropping critical fields such as Medicaid IDs and client identifiers. Root cause was mismatched API payloads between the intake CRM and the PDF generation engine.",
-    role: "SaaS Implementation & Product Specialist — responsible for payload analysis, field re-mapping, and QA validation of the document generation pipeline.",
-    solution: "Audited the API endpoints connecting the intake CRM to the PDF engine. Re-mapped nested JSON payload variables to the precise field coordinates in the dynamic PDF templates. Validated data integrity end-to-end and documented the mapping schema for future reference and team handoff.",
-    outcome: "Document generation failures were significantly reduced, field alignment improved across compliance forms, and the mapping schema became a reusable reference for subsequent client onboarding configurations.",
+    challenge: "Dynamic compliance PDFs were failing to compile or dropping critical fields such as Medicaid IDs. Root cause was mismatched API payloads between the intake CRM and the PDF generation engine.",
+    role: "SaaS Implementation & Product Specialist — responsible for payload analysis, field re-mapping, and QA validation.",
+    solution: "Audited API endpoints, re-mapped nested JSON payload variables to dynamic PDF template fields, and validated data integrity end-to-end.",
+    outcome: "Document generation failures significantly reduced, field alignment improved across compliance forms.",
   },
   {
     title: "API Validation & Release Testing",
     tag: "Bolt Healthcare · Case Study",
-    challenge: "Multiple API integrations required thorough validation before each production release. Schema mismatches — including character truncation, mismatched variable types, and special character handling — were causing PDF compilation errors and data loss in high-volume submissions.",
-    role: "QA & API Validation Specialist — designed and executed Postman-based test collections covering both standard and negative edge-case scenarios.",
-    solution: "Built structured Postman test collections to audit data transfers between front-end CRM webhooks and backend systems. Designed negative test cases to expose edge conditions such as oversized text strings, null values, and special characters. Tracked all defects in Jira through to engineering resolution.",
-    outcome: "Key schema mismatches were identified and resolved prior to release. The test collections remained as reusable validation assets for subsequent release cycles, reducing regression testing time.",
+    challenge: "Schema mismatches — including character truncation and mismatched variable types — were causing PDF compilation errors and data loss in high-volume submissions.",
+    role: "QA & API Validation Specialist — designed and executed Postman-based test collections covering standard and negative edge-case scenarios.",
+    solution: "Built structured Postman test collections, designed negative test cases, and tracked all defects in Jira through to engineering resolution.",
+    outcome: "Key schema mismatches identified and resolved. Test collections became reusable validation assets for subsequent release cycles.",
   },
   {
     title: "HHAeXchange Integration Support",
     tag: "Bolt Healthcare · Case Study",
-    challenge: "Ensuring reliable data exchange between the Bolt Healthcare platform and HHAeXchange across multiple rollouts required ongoing validation, timely issue resolution, and clear escalation when integration failures impacted agency operations.",
-    role: "SaaS Implementation & Technical Support Specialist — managed integration testing, Tier 2/3 escalation, and client-facing support across release cycles.",
-    solution: "Executed integration testing across each release, tracked data inconsistencies between systems, and resolved issues reported by end users through structured escalation. Maintained clear defect logs in Jira and coordinated fixes with engineering in Basecamp.",
-    outcome: "Integration reliability was maintained across multiple rollouts. Escalation response time improved through clearer defect documentation and engineering communication protocols established during the engagement.",
+    challenge: "Ensuring reliable data exchange between Bolt Healthcare and HHAeXchange required ongoing validation and timely issue resolution across multiple rollouts.",
+    role: "SaaS Implementation & Technical Support Specialist — managed integration testing and Tier 2/3 escalation.",
+    solution: "Executed integration testing, tracked data inconsistencies, and resolved issues through structured escalation. Maintained defect logs in Jira and coordinated fixes in Basecamp.",
+    outcome: "Integration reliability maintained across multiple rollouts with improved escalation response time.",
   },
 ];
 
@@ -122,7 +130,7 @@ const PROJECTS = [
     icon: Code2,
     title: "Django Blogging CMS",
     tag: "BCA Graduation Project",
-    desc: "A content management system built to demonstrate technical learning and development skills — authentication, CRUD operations, category management, and an admin dashboard.",
+    desc: "A content management system built to demonstrate technical learning — authentication, CRUD operations, category management, and an admin dashboard.",
     skills: ["Python", "Django", "MySQL", "MongoDB", "Bootstrap", "AJAX"],
   },
 ];
@@ -149,53 +157,61 @@ const TOOL_CATEGORIES = [
 
 function Navbar() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
+    <header className={`sticky top-0 z-50 transition-all ${scrolled ? "bg-white shadow-sm border-b border-gray-100" : "bg-white"}`}>
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
         <a href="#top" className="flex items-center gap-3">
           <img
             src="/freelancehub-logo.png"
-            alt="FreelanceHub — Naveen Sharma"
+            alt="FreelanceHub"
             className="h-10 w-auto object-contain"
             onError={(e) => { e.target.style.display = "none"; }}
           />
           <div className="flex flex-col leading-tight">
-            <span className="text-base font-bold tracking-tight text-slate-900">Naveen Sharma</span>
-            <span className="text-xs font-medium text-blue-700">SaaS Implementation · Support · QA</span>
+            <span className="text-base font-bold tracking-tight text-gray-900">Naveen Sharma</span>
+            <span className="text-xs font-medium text-blue-600">FreelanceHub · IT Services</span>
           </div>
         </a>
 
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="hidden items-center gap-8 md:flex">
           {NAV_LINKS.map((link) => (
             <a key={link.href} href={link.href}
-              className="text-sm font-medium text-slate-600 transition hover:text-blue-700">
+              className="text-sm font-medium text-gray-600 transition hover:text-blue-600">
               {link.label}
             </a>
           ))}
           <a href="#contact"
-            className="rounded-lg bg-blue-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-800">
+            className="rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700">
             Get in touch
           </a>
         </nav>
 
         <button onClick={() => setOpen((v) => !v)}
-          className="rounded-lg p-2 text-slate-700 transition hover:bg-slate-100 md:hidden"
+          className="rounded-lg p-2 text-gray-700 transition hover:bg-gray-100 md:hidden"
           aria-label="Toggle menu">
           {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
       {open && (
-        <nav className="border-t border-slate-200 bg-white md:hidden">
+        <nav className="border-t border-gray-100 bg-white md:hidden">
           <div className="mx-auto flex max-w-6xl flex-col px-4 py-2 sm:px-6">
             {NAV_LINKS.map((link) => (
               <a key={link.href} href={link.href} onClick={() => setOpen(false)}
-                className="border-b border-slate-100 py-3 text-sm font-medium text-slate-700 transition hover:text-blue-700">
+                className="border-b border-gray-100 py-3 text-sm font-medium text-gray-700 transition hover:text-blue-600">
                 {link.label}
               </a>
             ))}
             <a href="#contact" onClick={() => setOpen(false)}
-              className="mt-3 mb-2 rounded-lg bg-blue-700 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-800">
+              className="mt-3 mb-2 rounded-lg bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white">
               Get in touch
             </a>
           </div>
@@ -205,129 +221,110 @@ function Navbar() {
   );
 }
 
-
 function Hero() {
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(() => setIdx((i) => (i + 1) % HEADLINES.length), 3000);
+    return () => clearInterval(t);
+  }, []);
+
   return (
-    <section id="top" className="relative min-h-screen overflow-hidden bg-slate-900 text-white">
+    <section id="top" className="bg-white">
+      <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32 text-center">
 
-      {/* Rich illustrated background */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-950 via-slate-900 to-slate-950" />
-        <div className="absolute right-0 top-0 h-96 w-96 rounded-full bg-blue-600/20 blur-3xl" />
-        <div className="absolute bottom-0 left-0 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl" />
-        <div className="absolute inset-0 opacity-10"
-          style={{ backgroundImage: "linear-gradient(#3b82f6 1px, transparent 1px), linear-gradient(90deg, #3b82f6 1px, transparent 1px)", backgroundSize: "80px 80px" }} />
-        <svg className="absolute bottom-0 right-0 h-full w-auto opacity-10 lg:opacity-15" viewBox="0 0 600 600" fill="none">
-          <circle cx="400" cy="300" r="250" stroke="#3b82f6" strokeWidth="1" />
-          <circle cx="400" cy="300" r="180" stroke="#3b82f6" strokeWidth="0.5" />
-          <circle cx="400" cy="300" r="120" stroke="#60a5fa" strokeWidth="1" />
-          <circle cx="400" cy="300" r="60" fill="#3b82f6" fillOpacity="0.1" stroke="#3b82f6" strokeWidth="1" />
-          <line x1="400" y1="50" x2="400" y2="120" stroke="#3b82f6" strokeWidth="2" />
-          <line x1="400" y1="480" x2="400" y2="550" stroke="#3b82f6" strokeWidth="2" />
-          <line x1="150" y1="300" x2="220" y2="300" stroke="#3b82f6" strokeWidth="2" />
-          <circle cx="400" cy="50" r="6" fill="#3b82f6" />
-          <circle cx="400" cy="550" r="6" fill="#3b82f6" />
-          <circle cx="150" cy="300" r="6" fill="#3b82f6" />
-          <text x="370" y="315" fill="#3b82f6" fontSize="48" fontWeight="bold" fontFamily="sans-serif" fillOpacity="0.4">NS</text>
-        </svg>
-      </div>
-
-      <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-
-        {/* Name + Brand — BIG */}
-        <div className="mb-12">
-          <p className="text-2xl font-bold tracking-widest text-blue-400 uppercase sm:text-3xl">
-            Naveen Sharma
-          </p>
-          <h1 className="mt-1 text-6xl font-extrabold tracking-tight text-white sm:text-7xl lg:text-8xl">
-            FreelanceHub
-          </h1>
-          <div className="mt-3 h-1 w-24 rounded-full bg-blue-500" />
+        {/* Trust badge */}
+        <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-4 py-2">
+          <div className="flex gap-0.5">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} size={12} className="fill-yellow-400 text-yellow-400" />
+            ))}
+          </div>
+          <span className="text-xs font-semibold text-gray-700">8+ Years · Healthcare SaaS Specialist · B2B Contractor</span>
         </div>
 
-        {/* All 4 skills visible — no hiding */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-10">
+        {/* Name */}
+        <p className="text-2xl font-bold text-blue-600 tracking-wide mb-2">Naveen Sharma</p>
+
+        {/* Brand */}
+        <h1 className="text-7xl font-extrabold tracking-tight text-gray-900 sm:text-8xl mb-4">
+          FreelanceHub
+        </h1>
+
+        {/* Rotating headline */}
+        <div className="h-12 flex items-center justify-center mb-6">
+          <p key={idx} className="text-2xl font-semibold text-blue-600 sm:text-3xl">
+            {HEADLINES[idx]}
+          </p>
+        </div>
+
+        <p className="mx-auto max-w-2xl text-lg leading-relaxed text-gray-600 mb-10">
+          I combine hands-on SaaS implementation, product support, API validation, and quality
+          assurance to help organizations deploy, support, and improve business-critical workflows.
+        </p>
+
+        {/* CTAs */}
+        <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
+          <a href="#contact"
+            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-8 py-4 text-base font-semibold text-white transition hover:bg-blue-700">
+            Work with me <ArrowRight size={18} />
+          </a>
+          <a href="#services"
+            className="inline-flex items-center gap-2 rounded-lg border-2 border-gray-200 px-8 py-4 text-base font-semibold text-gray-700 transition hover:border-blue-300 hover:text-blue-600">
+            View services
+          </a>
+          <a href="/Naveen Sharma General CV.pdf" download
+            className="inline-flex items-center gap-2 rounded-lg border-2 border-gray-200 px-8 py-4 text-base font-semibold text-gray-700 transition hover:border-blue-300 hover:text-blue-600">
+            Download Resume
+          </a>
+        </div>
+
+        {/* Stats row */}
+        <div className="grid grid-cols-2 gap-6 sm:grid-cols-4 border-t border-gray-100 pt-12">
           {[
-            { tag: "SaaS Implementation", desc: "End-to-end platform deployment, workflow configuration, and customer onboarding." },
-            { tag: "Product Support", desc: "Tier 2/3 technical support, escalation management, and customer success operations." },
-            { tag: "API Validation", desc: "Postman test suites, schema validation, and integration testing across SaaS systems." },
-            { tag: "Quality Assurance", desc: "UAT, functional, regression testing, and production release validation." },
-          ].map((item) => (
-            <div key={item.tag}
-              className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-5">
-              <p className="text-sm font-bold text-blue-400">{item.tag}</p>
-              <p className="mt-2 text-xs leading-relaxed text-slate-400">{item.desc}</p>
+            { num: "8+", label: "Years Experience" },
+            { num: "4+", label: "Years Healthcare SaaS" },
+            { num: "Tier 2/3", label: "Technical Support" },
+            { num: "B2B", label: "Registered Contractor" },
+          ].map((s) => (
+            <div key={s.label} className="text-center">
+              <p className="text-3xl font-extrabold text-blue-600">{s.num}</p>
+              <p className="mt-1 text-sm text-gray-500">{s.label}</p>
             </div>
           ))}
-        </div>
-
-        <div className="grid gap-12 lg:grid-cols-2 lg:items-start">
-          {/* Buttons */}
-          <div className="flex flex-wrap gap-3">
-            <a href="#contact"
-              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-500">
-              Work with me <ArrowRight size={16} />
-            </a>
-            <a href="#services"
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-600 px-6 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-700/60">
-              View services
-            </a>
-            <a href="/Naveen Sharma General CV.pdf" download
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-600 px-6 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-700/60">
-              Download Resume
-            </a>
-          </div>
-
-          {/* Stats cards */}
-          <div className="grid grid-cols-2 gap-4">
-            {[
-              { num: "8+", label: "Years Experience" },
-              { num: "4+", label: "Years Healthcare SaaS" },
-              { num: "Tier 2/3", label: "Technical Support" },
-              { num: "B2B", label: "Registered Contractor" },
-            ].map((stat) => (
-              <div key={stat.label}
-                className="rounded-2xl border border-slate-700/60 bg-slate-800/40 p-5 backdrop-blur">
-                <p className="text-2xl font-bold text-blue-400">{stat.num}</p>
-                <p className="mt-1 text-xs text-slate-400">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Bottom tech strip */}
-        <div className="mt-16 w-full border-t border-slate-700/40 pt-8">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            {[
-              { symbol: "</>", label: "SaaS Implementation" },
-              { symbol: "⚙", label: "Workflow Automation" },
-              { symbol: "⬡", label: "API Validation" },
-              { symbol: "✓✓", label: "UAT & QA Testing" },
-              { symbol: "⊕", label: "System Integration" },
-            ].map((item) => (
-              <div key={item.label} className="flex flex-1 flex-col items-center gap-2">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-blue-500/20 bg-blue-500/10 text-xl text-blue-400">
-                  {item.symbol}
-                </div>
-                <span className="text-center text-xs font-medium text-slate-500">{item.label}</span>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </section>
   );
 }
 
-function SectionHeading({ eyebrow, title, description }) {
+function TrustBar() {
+  const tools = ["Postman", "Jira", "Basecamp", "HHAeXchange", "Postman API", "UAT Testing", "Bolt Healthcare", "GitHub", "Cloudflare"];
   return (
-    <div className="mb-12 max-w-2xl">
+    <div className="border-y border-gray-100 bg-gray-50 py-6">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <p className="mb-4 text-center text-xs font-semibold uppercase tracking-widest text-gray-400">
+          Core tools & platforms
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-6">
+          {tools.map((t) => (
+            <span key={t} className="text-sm font-semibold text-gray-400">{t}</span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SectionHeading({ eyebrow, title, description, center }) {
+  return (
+    <div className={`mb-16 ${center ? "text-center mx-auto max-w-2xl" : "max-w-2xl"}`}>
       {eyebrow && (
-        <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-blue-700">{eyebrow}</p>
+        <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-blue-600">{eyebrow}</p>
       )}
-      <h2 className="text-3xl font-bold tracking-tight text-slate-900">{title}</h2>
+      <h2 className="text-4xl font-extrabold tracking-tight text-gray-900">{title}</h2>
       {description && (
-        <p className="mt-3 text-base leading-relaxed text-slate-600">{description}</p>
+        <p className="mt-4 text-lg leading-relaxed text-gray-600">{description}</p>
       )}
     </div>
   );
@@ -336,28 +333,33 @@ function SectionHeading({ eyebrow, title, description }) {
 function About() {
   return (
     <section id="about" className="bg-white">
-      <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-        <SectionHeading eyebrow="About" title="Professional profile" />
-        <div className="grid gap-10 md:grid-cols-3">
-          <div className="md:col-span-2">
-            <p className="text-lg leading-relaxed text-slate-700">
-              I combine hands-on SaaS implementation, product support, API validation, and quality
-              assurance to help organizations deploy, support, and improve business-critical workflows.
-            </p>
-            <p className="mt-5 text-lg leading-relaxed text-slate-700">
+      <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
+        <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
+          <div>
+            <SectionHeading eyebrow="About" title="The specialist behind FreelanceHub"
+              description="I combine hands-on SaaS implementation, product support, API validation, and quality assurance to help organizations deploy, support, and improve business-critical workflows." />
+            <p className="text-base leading-relaxed text-gray-600">
               With 8+ years of professional experience, including 4+ years across healthcare SaaS
-              platforms, I'm comfortable partnering with engineering, QA, and product teams to keep
-              delivery moving and dependable.
+              platforms, I partner with engineering, QA, and product teams to keep delivery moving
+              and dependable — from first configuration through to production release.
             </p>
+            <a href="#contact"
+              className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:underline">
+              Get in touch <ArrowRight size={16} />
+            </a>
           </div>
-          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6">
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-500">At a glance</h3>
-            <dl className="mt-4 space-y-4 text-sm">
-              <div><dt className="text-slate-500">Focus</dt><dd className="font-medium text-slate-900">SaaS Implementation · Support · QA</dd></div>
-              <div><dt className="text-slate-500">Experience</dt><dd className="font-medium text-slate-900">8+ years · 4+ in healthcare SaaS</dd></div>
-              <div><dt className="text-slate-500">Engagement</dt><dd className="font-medium text-slate-900">Full-time · Hybrid · Remote · B2B contract</dd></div>
-              <div><dt className="text-slate-500">Tooling</dt><dd className="font-medium text-slate-900">Jira · Basecamp · Postman</dd></div>
-            </dl>
+          <div className="grid grid-cols-2 gap-4">
+            {[
+              { label: "Focus", value: "SaaS Implementation · Support · QA" },
+              { label: "Experience", value: "8+ years · 4+ in healthcare SaaS" },
+              { label: "Engagement", value: "Full-time · Hybrid · Remote · B2B" },
+              { label: "Tooling", value: "Jira · Basecamp · Postman" },
+            ].map((item) => (
+              <div key={item.label} className="rounded-2xl border border-gray-100 bg-gray-50 p-6">
+                <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">{item.label}</p>
+                <p className="mt-2 text-sm font-bold text-gray-900">{item.value}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -367,21 +369,21 @@ function About() {
 
 function Expertise() {
   return (
-    <section id="expertise" className="bg-slate-50">
-      <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-        <SectionHeading eyebrow="Expertise" title="Core areas I work in"
+    <section id="expertise" className="bg-gray-50">
+      <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
+        <SectionHeading eyebrow="Expertise" center title="Core areas I work in"
           description="The practical capabilities I bring to implementation, support, and quality work." />
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {EXPERTISE.map((item) => {
             const Icon = item.icon;
             return (
               <div key={item.title}
-                className="rounded-2xl border border-slate-200 bg-white p-6 transition hover:border-blue-200 hover:shadow-md">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
-                  <Icon size={22} />
+                className="rounded-2xl border border-gray-100 bg-white p-8 transition hover:shadow-lg hover:-translate-y-1">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                  <Icon size={24} />
                 </div>
-                <h3 className="mt-5 text-lg font-semibold text-slate-900">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600">{item.desc}</p>
+                <h3 className="mt-6 text-lg font-bold text-gray-900">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-gray-600">{item.desc}</p>
               </div>
             );
           })}
@@ -394,33 +396,33 @@ function Expertise() {
 function Experience() {
   return (
     <section id="experience" className="bg-white">
-      <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
         <SectionHeading eyebrow="Experience" title="Where I've worked" />
-        <div className="space-y-8">
+        <div className="space-y-6">
           {EXPERIENCES.map((exp) => (
             <div key={exp.company}
-              className="rounded-2xl border border-slate-200 bg-white p-7 transition hover:shadow-md">
+              className="rounded-2xl border border-gray-100 bg-white p-8 transition hover:shadow-lg">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900">{exp.company}</h3>
-                  <p className="mt-1 text-sm font-medium text-blue-700">{exp.context}</p>
+                  <h3 className="text-xl font-extrabold text-gray-900">{exp.company}</h3>
+                  <p className="mt-1 text-sm font-semibold text-blue-600">{exp.context}</p>
                 </div>
-                <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+                <span className="rounded-full bg-blue-50 px-4 py-1.5 text-xs font-bold text-blue-600">
                   {exp.period}
                 </span>
               </div>
               <div className="mt-4 flex flex-wrap gap-2">
                 {exp.roles.map((role) => (
                   <span key={role}
-                    className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-700">
+                    className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-medium text-gray-700">
                     {role}
                   </span>
                 ))}
               </div>
-              <ul className="mt-5 space-y-3">
+              <ul className="mt-6 space-y-3">
                 {exp.points.map((point, i) => (
-                  <li key={i} className="flex gap-3 text-sm leading-relaxed text-slate-700">
-                    <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-blue-600" />
+                  <li key={i} className="flex gap-3 text-sm leading-relaxed text-gray-600">
+                    <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-blue-500" />
                     <span>{point}</span>
                   </li>
                 ))}
@@ -435,29 +437,27 @@ function Experience() {
 
 function CaseStudies() {
   return (
-    <section id="casestudies" className="bg-slate-50">
-      <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+    <section id="casestudies" className="bg-gray-50">
+      <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
         <SectionHeading eyebrow="Case Studies · Bolt Healthcare"
           title="Real-world implementation work"
           description="A closer look at the types of challenges I solved across healthcare SaaS implementation, QA, and API validation. No confidential data is disclosed." />
         <div className="grid gap-6 md:grid-cols-2">
           {CASE_STUDIES.map((cs) => (
             <div key={cs.title}
-              className="rounded-2xl border border-slate-200 bg-white p-7 transition hover:shadow-md">
-              <span className="text-xs font-semibold uppercase tracking-wide text-blue-700">{cs.tag}</span>
-              <h3 className="mt-3 text-lg font-bold text-slate-900">{cs.title}</h3>
-              <div className="mt-5 space-y-4">
+              className="rounded-2xl border border-gray-100 bg-white p-8 transition hover:shadow-lg">
+              <span className="text-xs font-bold uppercase tracking-widest text-blue-600">{cs.tag}</span>
+              <h3 className="mt-3 text-lg font-extrabold text-gray-900">{cs.title}</h3>
+              <div className="mt-6 space-y-4">
                 {[
                   { label: "Challenge", text: cs.challenge, color: "bg-red-50 text-red-700" },
                   { label: "Role",      text: cs.role,      color: "bg-blue-50 text-blue-700" },
-                  { label: "Solution",  text: cs.solution,  color: "bg-slate-100 text-slate-700" },
+                  { label: "Solution",  text: cs.solution,  color: "bg-gray-100 text-gray-700" },
                   { label: "Outcome",   text: cs.outcome,   color: "bg-green-50 text-green-700" },
                 ].map(({ label, text, color }) => (
                   <div key={label}>
-                    <span className={`inline-block rounded-md px-2 py-0.5 text-xs font-semibold ${color}`}>
-                      {label}
-                    </span>
-                    <p className="mt-1.5 text-sm leading-relaxed text-slate-600">{text}</p>
+                    <span className={`inline-block rounded-md px-2 py-0.5 text-xs font-bold ${color}`}>{label}</span>
+                    <p className="mt-1.5 text-sm leading-relaxed text-gray-600">{text}</p>
                   </div>
                 ))}
               </div>
@@ -471,44 +471,14 @@ function CaseStudies() {
 
 function Services() {
   return (
-    <section id="services" className="bg-slate-900 text-white">
-      <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-
-        {/* FreelanceHub brand banner */}
-        <div className="mb-12 rounded-2xl border border-slate-700 bg-slate-800 p-8">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-blue-400">
-                FreelanceHub · IT Services
-              </p>
-              <h3 className="mt-2 text-2xl font-bold text-white">
-                QA & IT Consulting · AI & Tech Expertise
-              </h3>
-              <p className="mt-2 text-sm text-slate-300">
-                Registered Independent B2B Contractor · Be'er Sheva, Israel · Remote & On-Site
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {["SaaS Implementation", "API Validation", "UAT Testing", "Workflow Automation", "Technical Support"].map((tag) => (
-                  <span key={tag}
-                    className="rounded-full border border-blue-500/40 bg-blue-500/10 px-3 py-1 text-xs font-medium text-blue-300">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <a href="#contact"
-              className="shrink-0 rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-500">
-              Work with me
-            </a>
-          </div>
-        </div>
-
-        <div className="mb-12 max-w-2xl">
-          <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-blue-400">FreelanceHub</p>
-          <h2 className="text-3xl font-bold tracking-tight">Services for SaaS, healthcare & growing teams</h2>
-          <p className="mt-3 text-base leading-relaxed text-slate-300">
-            As a registered independent B2B contractor, I support startups, SaaS companies, healthcare
-            platforms, and international and local clients across implementation, support, and quality.
+    <section id="services" className="bg-blue-600 text-white">
+      <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
+        <div className="mb-16 text-center">
+          <p className="mb-3 text-sm font-bold uppercase tracking-widest text-blue-200">FreelanceHub</p>
+          <h2 className="text-4xl font-extrabold tracking-tight">Services for SaaS, healthcare & growing teams</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-blue-100">
+            As a registered independent B2B contractor, I support startups, SaaS companies,
+            healthcare platforms, and international clients.
           </p>
         </div>
         <div className="grid gap-6 sm:grid-cols-2">
@@ -516,17 +486,17 @@ function Services() {
             const Icon = service.icon;
             return (
               <div key={service.title}
-                className="rounded-2xl border border-slate-700 bg-slate-800/60 p-7">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600/20 text-blue-400">
-                    <Icon size={20} />
+                className="rounded-2xl bg-blue-700/50 p-8 border border-blue-500/30">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-white">
+                    <Icon size={22} />
                   </div>
-                  <h3 className="text-lg font-semibold">{service.title}</h3>
+                  <h3 className="text-lg font-bold">{service.title}</h3>
                 </div>
-                <ul className="mt-5 space-y-2">
+                <ul className="space-y-2.5">
                   {service.items.map((item) => (
-                    <li key={item} className="flex items-center gap-2.5 text-sm text-slate-300">
-                      <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
+                    <li key={item} className="flex items-center gap-3 text-sm text-blue-100">
+                      <CheckCircle2 size={16} className="shrink-0 text-blue-300" />
                       {item}
                     </li>
                   ))}
@@ -543,7 +513,7 @@ function Services() {
 function Projects() {
   return (
     <section id="projects" className="bg-white">
-      <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
         <SectionHeading eyebrow="Projects" title="Selected work & study"
           description="QA test planning certification projects alongside an academic development project." />
         <div className="grid gap-6 md:grid-cols-3">
@@ -551,17 +521,17 @@ function Projects() {
             const Icon = project.icon;
             return (
               <div key={project.title}
-                className="flex flex-col rounded-2xl border border-slate-200 bg-white p-6 transition hover:shadow-md">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-900 text-white">
-                  <Icon size={20} />
+                className="flex flex-col rounded-2xl border border-gray-100 bg-white p-8 transition hover:shadow-lg hover:-translate-y-1">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gray-900 text-white">
+                  <Icon size={22} />
                 </div>
-                <span className="mt-5 text-xs font-semibold uppercase tracking-wide text-blue-700">{project.tag}</span>
-                <h3 className="mt-2 text-base font-bold leading-snug text-slate-900">{project.title}</h3>
-                <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-600">{project.desc}</p>
-                <div className="mt-5 flex flex-wrap gap-2">
+                <span className="mt-6 text-xs font-bold uppercase tracking-widest text-blue-600">{project.tag}</span>
+                <h3 className="mt-2 text-base font-extrabold leading-snug text-gray-900">{project.title}</h3>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-gray-600">{project.desc}</p>
+                <div className="mt-6 flex flex-wrap gap-2">
                   {project.skills.map((skill) => (
                     <span key={skill}
-                      className="rounded-md bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700">
+                      className="rounded-lg bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">
                       {skill}
                     </span>
                   ))}
@@ -577,25 +547,21 @@ function Projects() {
 
 function Tools() {
   return (
-    <section className="bg-slate-50">
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-        <SectionHeading
-          eyebrow="Tools"
-          title="Tools I work with"
-          description="My core professional tooling spans SaaS implementation, QA, API validation, and technical operations. AI tools are used to enhance productivity — they support the work, not replace the expertise."
-        />
+    <section className="bg-gray-50">
+      <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
+        <SectionHeading eyebrow="Tools" center title="Tools I work with"
+          description="My core professional tooling spans SaaS implementation, QA, API validation, and technical operations. AI tools enhance productivity — they support the work, not replace the expertise." />
         <div className="space-y-6">
           {TOOL_CATEGORIES.map((cat) => (
-            <div key={cat.label}
-              className="rounded-2xl border border-slate-200 bg-white p-7">
-              <div>
-                <h3 className="text-base font-bold text-slate-700">{cat.label}</h3>
-                <p className="mt-0.5 text-xs text-slate-500">{cat.sublabel}</p>
+            <div key={cat.label} className="rounded-2xl border border-gray-100 bg-white p-8">
+              <div className="mb-5">
+                <h3 className="text-base font-extrabold text-gray-900">{cat.label}</h3>
+                <p className="mt-0.5 text-xs text-gray-400">{cat.sublabel}</p>
               </div>
-              <div className="mt-5 flex flex-wrap gap-2.5">
+              <div className="flex flex-wrap gap-2.5">
                 {cat.tools.map((tool) => (
                   <span key={tool}
-                    className="rounded-lg border border-slate-200 bg-slate-50 px-3.5 py-2 text-sm font-medium text-slate-600">
+                    className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-blue-300 hover:text-blue-600">
                     {tool}
                   </span>
                 ))}
@@ -610,39 +576,35 @@ function Tools() {
 
 function BrandVideo() {
   return (
-    <section className="bg-slate-900">
-      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-        <p className="mb-8 text-base text-slate-300">
+    <section className="bg-white">
+      <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
+        <p className="mb-8 text-lg font-medium text-gray-600 text-center">
           A short introduction to FreelanceHub and the services Naveen Sharma provides.
         </p>
         <div className="grid gap-6 md:grid-cols-2">
           <div>
-            <p className="mb-3 text-sm font-semibold text-slate-300">Brand Introduction</p>
-            <div className="overflow-hidden rounded-2xl border border-slate-700 shadow-xl">
+            <p className="mb-3 text-sm font-bold text-gray-700">Brand Introduction</p>
+            <div className="overflow-hidden rounded-2xl border border-gray-100 shadow-lg">
               <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
-                <iframe
-                  className="absolute inset-0 h-full w-full"
+                <iframe className="absolute inset-0 h-full w-full"
                   src="https://www.youtube.com/embed/XYdqYPwYiY4"
-                  title="FreelanceHub — Naveen Sharma | SaaS Implementation Specialist"
+                  title="FreelanceHub — Naveen Sharma"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
+                  allowFullScreen />
               </div>
             </div>
           </div>
           <div>
-            <p className="mb-3 text-sm font-semibold text-slate-300">FreelanceHub IT Services</p>
-            <div className="overflow-hidden rounded-2xl border border-slate-700 shadow-xl">
+            <p className="mb-3 text-sm font-bold text-gray-700">FreelanceHub IT Services</p>
+            <div className="overflow-hidden rounded-2xl border border-gray-100 shadow-lg">
               <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
-                <iframe
-                  className="absolute inset-0 h-full w-full"
+                <iframe className="absolute inset-0 h-full w-full"
                   src="https://www.youtube.com/embed/4dTadaeUE_A"
-                  title="FreelanceHub IT Services — Naveen Sharma"
+                  title="FreelanceHub IT Services"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
+                  allowFullScreen />
               </div>
             </div>
           </div>
@@ -654,70 +616,64 @@ function BrandVideo() {
 
 function Contact() {
   return (
-    <section id="contact" className="bg-slate-900 text-white">
-      <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-        <div className="grid gap-10 md:grid-cols-2">
-          <div>
-            <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-blue-400">Contact</p>
-            <h2 className="text-3xl font-bold tracking-tight">
-              Let's talk about your implementation, support, or QA needs
-            </h2>
-            <p className="mt-4 max-w-md text-base leading-relaxed text-slate-300">
-              Available for full-time, hybrid, and remote roles, as well as B2B contract engagements
-              through FreelanceHub. I'll reply to serious enquiries promptly.
-            </p>
-            <div className="mt-6 flex gap-3">
-              <a href="/Naveen Sharma General CV.pdf" target="_blank" rel="noreferrer"
-                className="rounded-lg border border-slate-600 px-4 py-2.5 text-sm font-semibold text-slate-100 transition hover:bg-slate-700/60">
-                View Resume
-              </a>
-              <a href="/Naveen Sharma General CV.pdf" download
-                className="rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-500">
-                Download Resume (PDF)
-              </a>
-            </div>
+    <section id="contact" className="bg-gray-50">
+      <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
+        <SectionHeading eyebrow="Contact" center
+          title="Let's talk about your implementation, support, or QA needs"
+          description="Available for full-time, hybrid, and remote roles, as well as B2B contract engagements through FreelanceHub." />
+
+        <div className="mx-auto max-w-2xl">
+          <div className="mb-6 flex justify-center gap-4">
+            <a href="/Naveen Sharma General CV.pdf" target="_blank" rel="noreferrer"
+              className="rounded-lg border-2 border-gray-200 px-6 py-3 text-sm font-bold text-gray-700 transition hover:border-blue-400 hover:text-blue-600">
+              View Resume
+            </a>
+            <a href="/Naveen Sharma General CV.pdf" download
+              className="rounded-lg bg-blue-600 px-6 py-3 text-sm font-bold text-white transition hover:bg-blue-700">
+              Download Resume (PDF)
+            </a>
           </div>
 
           <div className="space-y-3">
             {[
-              { href: "mailto:naveen.freelancehub@gmail.com", icon: Mail,     label: "Email",    text: "naveen.freelancehub@gmail.com", external: false },
-              { href: "https://linkedin.com/in/freelancehub", icon: Linkedin,  label: "LinkedIn", text: "linkedin.com/in/freelancehub",   external: true  },
-              { href: "https://github.com/naveensharmatech",  icon: Github,    label: "GitHub",   text: "github.com/naveensharmatech",    external: true  },
-              { href: "https://naveensharma.net",             icon: Globe,     label: "Website",  text: "naveensharma.net",               external: true  },
+              { href: "mailto:naveen.freelancehub@gmail.com", icon: Mail,    label: "Email",    text: "naveen.freelancehub@gmail.com", external: false },
+              { href: "https://linkedin.com/in/freelancehub", icon: Linkedin, label: "LinkedIn", text: "linkedin.com/in/freelancehub",   external: true  },
+              { href: "https://github.com/naveensharmatech",  icon: Github,   label: "GitHub",   text: "github.com/naveensharmatech",    external: true  },
+              { href: "https://naveensharma.net",             icon: Globe,    label: "Website",  text: "naveensharma.net",               external: true  },
             ].map(({ href, icon: Icon, label, text, external }) => (
               <a key={label} href={href}
                 target={external ? "_blank" : undefined}
                 rel={external ? "noreferrer" : undefined}
-                className="flex items-center gap-4 rounded-xl border border-slate-700 bg-slate-800/60 p-5 transition hover:border-blue-500">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600/20 text-blue-400">
+                className="flex items-center gap-4 rounded-xl border border-gray-100 bg-white p-5 transition hover:border-blue-300 hover:shadow-md">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
                   <Icon size={20} />
                 </div>
                 <div>
-                  <p className="text-xs text-slate-400">{label}</p>
-                  <p className="text-sm font-medium">{text}</p>
+                  <p className="text-xs font-semibold text-gray-400">{label}</p>
+                  <p className="text-sm font-bold text-gray-900">{text}</p>
                 </div>
-                {external && <ExternalLink size={15} className="ml-auto text-slate-500" />}
+                {external && <ExternalLink size={15} className="ml-auto text-gray-300" />}
               </a>
             ))}
 
             <a href="tel:+972587896289"
-              className="flex items-center gap-4 rounded-xl border border-slate-700 bg-slate-800/60 p-5 transition hover:border-blue-500">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600/20 text-blue-400">
+              className="flex items-center gap-4 rounded-xl border border-gray-100 bg-white p-5 transition hover:border-blue-300 hover:shadow-md">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
                 <Phone size={20} />
               </div>
               <div>
-                <p className="text-xs text-slate-400">Phone</p>
-                <p className="text-sm font-medium">058-789-6289</p>
+                <p className="text-xs font-semibold text-gray-400">Phone</p>
+                <p className="text-sm font-bold text-gray-900">058-789-6289</p>
               </div>
             </a>
 
-            <div className="flex items-center gap-4 rounded-xl border border-slate-700 bg-slate-800/60 p-5">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600/20 text-blue-400">
+            <div className="flex items-center gap-4 rounded-xl border border-gray-100 bg-white p-5">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
                 <MapPin size={20} />
               </div>
               <div>
-                <p className="text-xs text-slate-400">Location</p>
-                <p className="text-sm font-medium">Be'er Sheva, Israel</p>
+                <p className="text-xs font-semibold text-gray-400">Location</p>
+                <p className="text-sm font-bold text-gray-900">Be'er Sheva, Israel</p>
               </div>
             </div>
           </div>
@@ -729,18 +685,18 @@ function Contact() {
 
 function Footer() {
   return (
-    <footer className="border-t border-slate-800 bg-slate-900 text-slate-400">
-      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <footer className="border-t border-gray-100 bg-white">
+      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
         <div className="flex flex-col items-center gap-4 text-center">
           <img
             src="/freelancehub-logo.png"
             alt="FreelanceHub"
-            className="h-14 w-auto object-contain opacity-90"
+            className="h-14 w-auto object-contain"
             onError={(e) => { e.target.style.display = "none"; }}
           />
-          <p className="font-medium text-slate-300">Naveen Sharma · FreelanceHub</p>
-          <p className="text-xs">SaaS Implementation · Product Support · Quality Assurance</p>
-          <p className="text-xs">© {new Date().getFullYear()} All rights reserved</p>
+          <p className="font-extrabold text-gray-900">Naveen Sharma · FreelanceHub</p>
+          <p className="text-sm text-gray-500">SaaS Implementation · Product Support · Quality Assurance</p>
+          <p className="text-xs text-gray-400">© {new Date().getFullYear()} All rights reserved</p>
         </div>
       </div>
     </footer>
@@ -751,10 +707,11 @@ function Footer() {
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-white text-slate-900">
+    <div className="min-h-screen bg-white text-gray-900">
       <Navbar />
       <main>
         <Hero />
+        <TrustBar />
         <About />
         <Expertise />
         <Experience />
