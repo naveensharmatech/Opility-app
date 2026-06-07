@@ -207,51 +207,85 @@ function Navbar() {
 
 
 function Hero() {
+  const [active, setActive] = useState(0);
+  const slides = [
+    { tag: "SaaS Implementation", title: "Deploying & Configuring Business-Critical SaaS Platforms", sub: "End-to-end implementation, workflow configuration, and customer onboarding." },
+    { tag: "API Validation & QA", title: "Validating APIs, Releases & Healthcare Workflows", sub: "Postman test suites, UAT, regression testing, and defect lifecycle management." },
+    { tag: "Product & Technical Support", title: "Tier 2/3 Support Across SaaS & Healthcare Systems", sub: "Escalation management, root cause analysis, and customer success operations." },
+    { tag: "FreelanceHub · B2B Contractor", title: "Available for Remote, Hybrid & On-Site Engagements", sub: "Registered independent contractor based in Be'er Sheva, Israel." },
+  ];
+
   return (
-    <section id="top" className="bg-gradient-to-b from-slate-900 to-slate-800 text-white">
-      <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-700/60 px-3 py-1 text-xs font-medium text-slate-200">
-            <MapPin size={13} /> Be'er Sheva, Israel
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-700/60 px-3 py-1 text-xs font-medium text-slate-200">
-            Remote · Hybrid · On-Site
-          </span>
+    <section id="top" className="relative overflow-hidden bg-slate-900 text-white">
+      {/* Gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 opacity-90" />
+      {/* Grid overlay */}
+      <div className="absolute inset-0 opacity-5"
+        style={{ backgroundImage: "linear-gradient(#3b82f6 1px, transparent 1px), linear-gradient(90deg, #3b82f6 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
+
+      <div className="relative mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32">
+        <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+
+          {/* Left content */}
+          <div>
+            <span className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-blue-400">
+              {slides[active].tag}
+            </span>
+            <p className="mt-5 text-lg font-semibold text-blue-400 tracking-wide">Naveen Sharma</p>
+            <h1 className="mt-1 text-5xl font-bold leading-tight tracking-tight text-white sm:text-6xl lg:text-7xl">
+              FreelanceHub
+            </h1>
+            <p className="mt-3 text-xl font-medium text-slate-300">
+              {slides[active].title}
+            </p>
+            <p className="mt-3 max-w-lg text-base leading-relaxed text-slate-400">
+              {slides[active].sub}
+            </p>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a href="#contact"
+                className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-500">
+                Work with me <ArrowRight size={16} />
+              </a>
+              <a href="#services"
+                className="inline-flex items-center gap-2 rounded-lg border border-slate-600 px-6 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-700/60">
+                View services
+              </a>
+              <a href="/Naveen Sharma General CV.pdf" download
+                className="inline-flex items-center gap-2 rounded-lg border border-slate-600 px-6 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-700/60">
+                Download Resume
+              </a>
+            </div>
+
+            {/* Slide dots */}
+            <div className="mt-10 flex gap-2">
+              {slides.map((_, i) => (
+                <button key={i} onClick={() => setActive(i)}
+                  className={`h-2 rounded-full transition-all ${i === active ? "w-8 bg-blue-500" : "w-2 bg-slate-600 hover:bg-slate-400"}`} />
+              ))}
+            </div>
+          </div>
+
+          {/* Right — stats cards */}
+          <div className="grid grid-cols-2 gap-4">
+            {[
+              { num: "8+", label: "Years Experience" },
+              { num: "4+", label: "Years Healthcare SaaS" },
+              { num: "Tier 2/3", label: "Technical Support" },
+              { num: "B2B", label: "Registered Contractor" },
+            ].map((stat) => (
+              <div key={stat.label}
+                className="rounded-2xl border border-slate-700/60 bg-slate-800/40 p-6 backdrop-blur">
+                <p className="text-3xl font-bold text-blue-400">{stat.num}</p>
+                <p className="mt-1 text-sm text-slate-400">{stat.label}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-tight tracking-tight sm:text-5xl">
-          SaaS Implementation Specialist • Product Support • QA & API Validation
-        </h1>
-
-        <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-300">
-          I combine hands-on SaaS implementation, product support, API validation, and quality
-          assurance to help organizations deploy, support, and improve business-critical workflows.
-          I also operate as a registered independent B2B contractor under{" "}
-          <span className="font-semibold text-white">FreelanceHub</span>.
-        </p>
-
-        <div className="mt-8 flex flex-wrap gap-3">
-          <a href="#contact"
-            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-500">
-            Work with me <ArrowRight size={16} />
-          </a>
-          <a href="#services"
-            className="inline-flex items-center gap-2 rounded-lg border border-slate-600 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-700/60">
-            View services
-          </a>
-          <a href="/Naveen Sharma General CV.pdf" target="_blank" rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-lg border border-slate-600 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-700/60">
-            View Resume
-          </a>
-          <a href="/Naveen Sharma General CV.pdf" download
-            className="inline-flex items-center gap-2 rounded-lg border border-slate-600 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-700/60">
-            Download Resume (PDF)
-          </a>
-        </div>
-
-        {/* High-tech decorative banner */}
-        <div className="mt-10 w-full rounded-2xl border border-slate-700/50 bg-slate-800/30 p-8 backdrop-blur">
-          <div className="flex flex-wrap items-center justify-between gap-6">
+        {/* Bottom tech strip */}
+        <div className="mt-14 w-full border-t border-slate-700/40 pt-8">
+          <div className="flex flex-wrap items-center justify-between gap-4">
             {[
               { symbol: "</>", label: "SaaS Implementation" },
               { symbol: "⚙", label: "Workflow Automation" },
@@ -260,19 +294,12 @@ function Hero() {
               { symbol: "⊕", label: "System Integration" },
             ].map((item) => (
               <div key={item.label} className="flex flex-1 flex-col items-center gap-2">
-                <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-blue-500/30 bg-blue-500/10 text-2xl text-blue-400">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-blue-500/20 bg-blue-500/10 text-xl text-blue-400">
                   {item.symbol}
                 </div>
-                <span className="text-xs font-medium text-slate-400 text-center">{item.label}</span>
+                <span className="text-xs font-medium text-slate-500 text-center">{item.label}</span>
               </div>
             ))}
-          </div>
-          <div className="mt-6 flex items-center gap-3">
-            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-blue-500/40 to-transparent" />
-            <span className="text-xs font-semibold uppercase tracking-widest text-blue-400">
-              Be'er Sheva, Israel · Remote · Hybrid · On-Site · B2B Contracts
-            </span>
-            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-blue-500/40 to-transparent" />
           </div>
         </div>
       </div>
