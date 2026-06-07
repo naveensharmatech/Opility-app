@@ -612,11 +612,9 @@ function BrandVideo() {
   return (
     <section className="bg-slate-900">
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-        <SectionHeading
-          eyebrow="FreelanceHub · Brand Videos"
-          title="Watch our introduction"
-          description="A short introduction to FreelanceHub and the services Naveen Sharma provides."
-        />
+        <p className="mb-8 text-base text-slate-300">
+          A short introduction to FreelanceHub and the services Naveen Sharma provides.
+        </p>
         <div className="grid gap-6 md:grid-cols-2">
           <div>
             <p className="mb-3 text-sm font-semibold text-slate-300">Brand Introduction</p>
