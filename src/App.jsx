@@ -154,7 +154,7 @@ function Navbar() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
         <a href="#top" className="flex items-center gap-3">
           <img
-            src="/freelancehub-logo.jpeg"
+            src="/freelancehub-logo.png"
             alt="FreelanceHub — Naveen Sharma"
             className="h-10 w-auto object-contain"
             onError={(e) => { e.target.style.display = "none"; }}
@@ -249,12 +249,31 @@ function Hero() {
           </a>
         </div>
 
-        <div className="mt-10 flex justify-center">
-          <img
-            src="/banner.jpeg"
-            alt="SaaS Implementation | Product Support | Technical Operations — Naveen Sharma"
-            className="w-full max-w-xl rounded-xl object-cover shadow-md"
-          />
+        {/* High-tech decorative banner */}
+        <div className="mt-10 w-full rounded-2xl border border-slate-700/50 bg-slate-800/30 p-8 backdrop-blur">
+          <div className="flex flex-wrap items-center justify-between gap-6">
+            {[
+              { symbol: "</>", label: "SaaS Implementation" },
+              { symbol: "⚙", label: "Workflow Automation" },
+              { symbol: "⬡", label: "API Validation" },
+              { symbol: "✓✓", label: "UAT & QA Testing" },
+              { symbol: "⊕", label: "System Integration" },
+            ].map((item) => (
+              <div key={item.label} className="flex flex-1 flex-col items-center gap-2">
+                <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-blue-500/30 bg-blue-500/10 text-2xl text-blue-400">
+                  {item.symbol}
+                </div>
+                <span className="text-xs font-medium text-slate-400 text-center">{item.label}</span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 flex items-center gap-3">
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-blue-500/40 to-transparent" />
+            <span className="text-xs font-semibold uppercase tracking-widest text-blue-400">
+              Be'er Sheva, Israel · Remote · Hybrid · On-Site · B2B Contracts
+            </span>
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-blue-500/40 to-transparent" />
+          </div>
         </div>
       </div>
     </section>
@@ -677,7 +696,7 @@ function Footer() {
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         <div className="flex flex-col items-center gap-4 text-center">
           <img
-            src="/freelancehub-logo.jpeg"
+            src="/freelancehub-logo.png"
             alt="FreelanceHub"
             className="h-14 w-auto object-contain opacity-90"
             onError={(e) => { e.target.style.display = "none"; }}
