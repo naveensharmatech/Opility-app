@@ -951,7 +951,7 @@ function EllaChat() {
           <div className="flex items-center justify-between bg-blue-600 px-4 py-3">
             <div className="flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-full overflow-hidden ring-2 ring-white/30">
-                <img src="/ella-avatar.jpeg" alt="Ella" className="h-full w-full object-cover object-top" />
+                <img src="/ella-avatar.jpeg" alt="Ella" className="h-full w-full object-cover" style={{objectPosition: "center 8%", transform: "scale(1.8)", transformOrigin: "top center"}} />
               </div>
               <div>
                 <p className="text-sm font-bold text-white">Ella</p>

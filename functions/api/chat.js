@@ -73,7 +73,7 @@ export async function onRequestPost(context) {
           "Authorization": `Bearer ${env.GROQ_API_KEY}`,
         },
         body: JSON.stringify({
-          model: "llama3-8b-8192",
+          model: "llama-3.1-8b-instant",
           messages: [
             { role: "system", content: SYSTEM_PROMPT },
             ...messages.map((m) => ({ role: m.role, content: m.content })),
@@ -97,9 +97,9 @@ export async function onRequestPost(context) {
     return new Response(JSON.stringify({ reply }), {
       headers: { "Content-Type": "application/json" },
     });
-  } catch (err) {
+  } catch {
     return new Response(
-      JSON.stringify({ reply: `Debug: ${err.message}` }),
+      JSON.stringify({ reply: "I'm having a moment! Please reach Naveen directly at naveen.freelancehub@gmail.com" }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
   }
