@@ -374,18 +374,25 @@ function About() {
               Get in touch <ArrowRight size={16} />
             </a>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            {[
-              { label: "As Employee", value: "SaaS · QA · API · Product Support" },
-              { label: "Experience", value: "8+ years · 4+ in healthcare SaaS" },
-              { label: "Via FreelanceHub", value: "Web Dev · Resumes · LinkedIn" },
-              { label: "Availability", value: "Full-time · Hybrid · Remote · B2B" },
-            ].map((item) => (
-              <div key={item.label} className="rounded-2xl border border-gray-100 bg-gray-50 p-6">
-                <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">{item.label}</p>
-                <p className="mt-2 text-sm font-bold text-gray-900">{item.value}</p>
-              </div>
-            ))}
+          <div className="flex flex-col items-center gap-6 lg:items-start">
+            <img
+              src="/naveen-photo.jpg"
+              alt="Naveen Sharma"
+              className="h-52 w-52 rounded-2xl object-cover shadow-lg ring-4 ring-white"
+            />
+            <div className="grid w-full grid-cols-2 gap-4">
+              {[
+                { label: "As Employee", value: "SaaS · QA · API · Product Support" },
+                { label: "Experience", value: "8+ years · 4+ in healthcare SaaS" },
+                { label: "Via FreelanceHub", value: "Web Dev · Resumes · LinkedIn" },
+                { label: "Availability", value: "Full-time · Hybrid · Remote · B2B" },
+              ].map((item) => (
+                <div key={item.label} className="rounded-2xl border border-gray-100 bg-gray-50 p-6">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">{item.label}</p>
+                  <p className="mt-2 text-sm font-bold text-gray-900">{item.value}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -806,7 +813,7 @@ function Footer() {
 const FAQS = [
   {
     q: "What services do you offer?",
-    a: "I offer SaaS implementation & workflow configuration, product and technical support (Tier 2/3), QA & UAT engineering, API validation with Postman, workflow automation and technical documentation, and website design & development using React, Tailwind CSS, GitHub, and Cloudflare Pages.",
+    a: "As an employee, I specialise in SaaS implementation & workflow configuration, product and technical support (Tier 2/3), QA & UAT engineering, API validation with Postman, and workflow automation. Through FreelanceHub as a B2B contractor, I offer website design & development (React, Tailwind CSS, Cloudflare Pages) and career & professional presence services — including ATS-optimised resume writing and LinkedIn profile optimisation.",
   },
   {
     q: "Are you available for remote or international work?",
@@ -831,6 +838,14 @@ const FAQS = [
   {
     q: "Do you work with tools like Jira, Postman, or Basecamp?",
     a: "These are core to my day-to-day workflow. I use Jira for defect tracking and sprint management, Postman for API validation and test collections, and Basecamp for project coordination. I'm also experienced with Notion AI, GitHub, VS Code, and a range of AI-assisted productivity tools.",
+  },
+  {
+    q: "Can you write an ATS-optimised resume for me?",
+    a: "Yes — through FreelanceHub I offer ATS-optimised resume writing tailored to your target role and industry. I format and structure your experience so it passes applicant tracking systems and reads well to hiring managers. I also help with professional bios and career document creation using AI-assisted tools.",
+  },
+  {
+    q: "Do you offer LinkedIn profile optimisation?",
+    a: "Yes. I review and rewrite your LinkedIn profile — headline, about section, experience entries, and skills — to improve visibility in recruiter searches and present a consistent, professional personal brand. This is offered as a standalone service or bundled with resume writing through FreelanceHub.",
   },
 ];
 
