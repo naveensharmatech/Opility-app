@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import {
   Menu, X, Mail, Github, MapPin, Globe, ArrowRight, CheckCircle2,
   Workflow, Headset, ShieldCheck, FileText, Layers, Database,
-  ClipboardCheck, Code2, ExternalLink, Phone, Linkedin, Facebook, ChevronDown, Youtube,
+  ClipboardCheck, Code2, ExternalLink, Phone, Linkedin, Facebook, ChevronDown, Youtube, Briefcase,
 } from "lucide-react";
 
 /* ─── DATA ───────────────────────────────────────────────────── */
@@ -24,6 +24,7 @@ const HEADLINES = [
   "QA & UAT Engineer",
   "Product Support Specialist",
   "Website Design & Development",
+  "Career & Professional Presence",
   "B2B Technical Contractor",
 ];
 
@@ -35,6 +36,7 @@ const EXPERTISE = [
   { icon: Database,       title: "API Validation",              desc: "API testing and validation with Postman across integrated healthcare workflows." },
   { icon: FileText,       title: "Technical Documentation",     desc: "SOPs, process documentation, and QA documentation that teams can rely on." },
   { icon: Globe,          title: "Website Design & Development", desc: "Building and deploying responsive business websites using React, Tailwind CSS, GitHub, Cloudflare Pages, and AI-assisted development tools." },
+  { icon: Briefcase,     title: "Career & Professional Presence", desc: "ATS-optimized resume writing, LinkedIn profile optimization, and career portfolio setup to help professionals present themselves effectively." },
 ];
 
 const EXPERIENCES = [
@@ -121,6 +123,7 @@ const SERVICES = [
   { icon: Headset,     title: "Product & Customer Support",    items: ["Product support", "Technical troubleshooting", "Customer support operations", "Escalation management"] },
   { icon: ShieldCheck, title: "QA & Validation",               items: ["UAT", "Functional testing", "Regression testing", "API validation", "Validation processes"] },
   { icon: FileText,    title: "Automation & Documentation",    items: ["Workflow automation", "Document automation", "Technical documentation", "SOPs & process documentation", "QA documentation"] },
+  { icon: Briefcase,   title: "Career & Professional Presence", items: ["ATS-optimized resume writing", "LinkedIn profile optimization", "Career portfolio website setup", "Professional bio & personal branding", "AI-assisted career document creation"] },
 ];
 
 const PROJECTS = [
@@ -173,7 +176,7 @@ const TOOL_CATEGORIES = [
   {
     label: "Design & Content",
     sublabel: "Supporting documentation and presentation",
-    tools: ["Canva", "Adobe Express", "Adobe Firefly", "Creative Cloud Pro", "Frame.io"],
+    tools: ["Canva", "Adobe Express", "Adobe Firefly", "Creative Cloud Pro", "Frame.io", "LinkedIn"],
   },
 ];
 
