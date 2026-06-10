@@ -143,12 +143,17 @@ const TOOL_CATEGORIES = [
   {
     label: "SaaS, QA & Technical Operations",
     sublabel: "Core professional tooling",
-    tools: ["Postman", "Jira", "Basecamp", "Notion AI", "GitHub", "Visual Studio Code", "Cloudflare", "Wix", "Solo (Mozilla)", "Lovable", "Manus", "Base44", "Hostinger", "SITE123", "Carrd", "Square", "Squarespace"],
+    tools: ["Postman", "Jira", "Basecamp", "Notion AI", "HHAeXchange", "Solo (Mozilla)"],
+  },
+  {
+    label: "Website Design & Development",
+    sublabel: "Tools used to build, deploy, and manage websites",
+    tools: ["React", "Vite", "Tailwind CSS", "GitHub", "Visual Studio Code", "Cloudflare Pages", "Wix", "Squarespace", "Hostinger", "SITE123", "Carrd", "Lovable", "Base44", "Manus", "Square"],
   },
   {
     label: "AI-Assisted Productivity & Development",
     sublabel: "Used to enhance and accelerate professional work",
-    tools: ["Gemini Code Assist", "Claude", "Gemini", "Google AI Studio", "GitHub Copilot", "ChatGPT", "Perplexity", "Cursor", "v0", "Gamma"],
+    tools: ["Claude", "Gemini", "GitHub Copilot", "ChatGPT", "Cursor", "v0", "Gemini Code Assist", "Google AI Studio", "Perplexity", "Gamma"],
   },
   {
     label: "Design & Content",
@@ -549,7 +554,7 @@ function Tools() {
     <section className="bg-gray-50">
       <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
         <SectionHeading eyebrow="Tools" center title="Tools I work with"
-          description="My core professional tooling spans SaaS implementation, QA, API validation, and technical operations. AI tools enhance productivity — they support the work, not replace the expertise." />
+          description="My core professional tooling spans SaaS implementation, QA, API validation, website design & development, and technical operations. AI tools enhance productivity — they support the work, not replace the expertise." />
         <div className="space-y-6">
           {TOOL_CATEGORIES.map((cat) => (
             <div key={cat.label} className="rounded-2xl border border-gray-100 bg-white p-8">
