@@ -105,6 +105,14 @@ const CASE_STUDIES = [
     solution: "Executed integration testing, tracked data inconsistencies, and resolved issues through structured escalation. Maintained defect logs in Jira and coordinated fixes in Basecamp.",
     outcome: "Integration reliability maintained across multiple rollouts with improved escalation response time.",
   },
+  {
+    title: "Portfolio & Business Website — naveensharma.net",
+    tag: "FreelanceHub · Live Project",
+    challenge: "Needed a professional online presence to establish the FreelanceHub brand, showcase SaaS and QA expertise, and attract B2B clients — without the limitations of generic website builders.",
+    role: "Designer, Developer & Project Owner — full end-to-end ownership from concept to deployment.",
+    solution: "Designed and built a custom single-page application using React + Vite and Tailwind CSS. Used GitHub for version control and Cloudflare Pages for hosting and CDN. Leveraged AI-assisted development throughout to accelerate delivery.",
+    outcome: "Live at naveensharma.net — demonstrates web development capability alongside core SaaS and QA services. Deployed to Cloudflare's global edge network.",
+  },
 ];
 
 const SERVICES = [
@@ -136,6 +144,13 @@ const PROJECTS = [
     tag: "BCA Graduation Project",
     desc: "A content management system built to demonstrate technical learning and development skills — authentication, CRUD operations, category management, and an admin dashboard.",
     skills: ["Python", "Django", "MySQL", "MongoDB", "Bootstrap", "AJAX"],
+  },
+  {
+    icon: Globe,
+    title: "naveensharma.net — Portfolio & Business Website",
+    tag: "FreelanceHub · Live Project",
+    desc: "Designed, built, and deployed a professional portfolio and business website end-to-end — from concept and layout through to domain go-live on Cloudflare Pages.",
+    skills: ["React", "Vite", "Tailwind CSS", "GitHub", "Cloudflare Pages", "AI-Assisted Dev"],
   },
 ];
 
@@ -303,7 +318,7 @@ function Hero() {
 }
 
 function TrustBar() {
-  const tools = ["Postman", "Jira", "Basecamp", "HHAeXchange", "Postman API", "UAT Testing", "Bolt Healthcare", "GitHub", "Cloudflare"];
+  const tools = ["Postman", "Jira", "Basecamp", "HHAeXchange", "React", "Tailwind CSS", "GitHub", "Cloudflare", "VS Code"];
   return (
     <div className="border-y border-gray-100 bg-gray-50 py-6">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
