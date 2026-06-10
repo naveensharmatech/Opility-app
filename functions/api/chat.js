@@ -97,12 +97,9 @@ export async function onRequestPost(context) {
     return new Response(JSON.stringify({ reply }), {
       headers: { "Content-Type": "application/json" },
     });
-  } catch {
+  } catch (err) {
     return new Response(
-      JSON.stringify({
-        reply:
-          "I'm having a moment! Please reach Naveen directly at naveen.freelancehub@gmail.com",
-      }),
+      JSON.stringify({ reply: `Debug: ${err.message}` }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
   }
