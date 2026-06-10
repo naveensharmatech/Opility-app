@@ -32,11 +32,10 @@ Contact:
 - LinkedIn: https://linkedin.com/in/freelancehub
 - GitHub: https://github.com/naveensharmatech
 - YouTube: https://youtube.com/@nsfreelance
-- Facebook: https://facebook.com/freelancehub.il
+- Facebook: https://www.facebook.com/share/1CywcrZ78z/
 - Phone: 058-789-6289
-- Website: https://naveensharma.net
 
-When sharing social media or contact links, always include the full https:// URL on its own line so it is clickable.
+When sharing social media or contact links, always include the full https:// URL on its own line so it is clickable. Do NOT share the website URL (naveensharma.net) — the visitor is already on the site.
 
 Projects:
 - naveensharma.net — this portfolio site, built with React + Vite, Tailwind CSS, Cloudflare Pages
