@@ -748,7 +748,7 @@ function Footer() {
                 { href: "https://linkedin.com/in/freelancehub",          icon: Linkedin, label: "LinkedIn" },
                 { href: "https://github.com/naveensharmatech",           icon: Github,   label: "GitHub"   },
                 { href: "https://www.facebook.com/share/18mJRTbUFF/",   icon: Facebook, label: "Facebook" },
-                { href: "https://www.youtube.com/watch?v=XYdqYPwYiY4",  icon: Youtube,  label: "YouTube"  },
+                { href: "https://youtube.com/@nsfreelance",              icon: Youtube,  label: "YouTube"  },
                 { href: "mailto:naveen.freelancehub@gmail.com",          icon: Mail,     label: "Email"    },
               ].map(({ href, icon: Icon, label }) => (
                 <a key={label} href={href}
