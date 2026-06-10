@@ -905,7 +905,7 @@ function EllaChat() {
   const [messages, setMessages] = useState([
     {
       role: "assistant",
-      content: "Welcome to FreelanceHub by Naveen Sharma! I'm Ella, your AI assistant. Ask me anything about services, experience, or availability — I'm happy to help!",
+      content: "🙏 Welcome to FreelanceHub by Naveen Sharma! I'm Ella, your AI assistant. Ask me anything about services, experience, or availability — I'm happy to help! 😊",
     },
   ]);
   const [input, setInput] = useState("");
