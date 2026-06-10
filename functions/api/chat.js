@@ -56,18 +56,22 @@ export async function onRequestPost(context) {
   try {
     const { messages } = await request.json();
 
-    const geminiMessages = messages.map((m) => ({
-      role: m.role === "assistant" ? "model" : "user",
-      parts: [{ text: m.content }],
-    }));
+    // Inject system prompt as first message pair for max compatibility
+    const geminiMessages = [
+      { role: "user", parts: [{ text: SYSTEM_PROMPT }] },
+      { role: "model", parts: [{ text: "Understood! I'm Ella, Naveen's AI assistant. I'm ready to help visitors with any questions about his services and experience." }] },
+      ...messages.map((m) => ({
+        role: m.role === "assistant" ? "model" : "user",
+        parts: [{ text: m.content }],
+      })),
+    ];
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${env.GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${env.GEMINI_API_KEY}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
           contents: geminiMessages,
           generationConfig: { maxOutputTokens: 350, temperature: 0.7 },
         }),
