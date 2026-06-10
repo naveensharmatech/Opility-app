@@ -753,7 +753,7 @@ function Footer() {
                 </a>
               ))}
             </div>
-            <div className="flex flex-wrap justify-center gap-x-5 gap-y-1 mt-1">
+            <div className="grid grid-cols-2 gap-x-8 gap-y-1.5 mt-1">
               {[
                 { key: "privacy",  label: "Privacy & Data Policy" },
                 { key: "legal",    label: "Legal Notice" },
@@ -761,7 +761,7 @@ function Footer() {
                 { key: "cookies",  label: "Cookie Policy" },
               ].map(({ key, label }) => (
                 <button key={key} onClick={() => setActiveDoc(key)}
-                  className="text-xs text-gray-400 hover:text-blue-600 transition underline-offset-2 hover:underline">
+                  className="text-xs text-gray-400 hover:text-blue-600 transition underline-offset-2 hover:underline text-center">
                   {label}
                 </button>
               ))}
